@@ -58,7 +58,7 @@
             document.body.appendChild(renderer.domElement);
 
             let loader = new THREE.GLTFLoader();
-            loader.load('./model/Umbelra_pj.gltf', function(gltf) {
+            loader.load('./model/Umbelra/Umbelra_pj.gltf', function(gltf) {
                 Umbelra = gltf.scene.children[0];
                 Umbelra.scale.set(0.5, 0.5, 0.5);
                 scene.add(gltf.scene);
