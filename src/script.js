@@ -25,12 +25,14 @@ dracoLoader.setDecoderPath('draco/')
 const gltfLoader = new GLTFLoader()
 gltfLoader.setDRACOLoader(dracoLoader)
 
+scene.background = new THREE.Color(0xffffff);
 var spotLight = new THREE.SpotLight( 0xffffff )
-spotLight.position.set(-40,60,-10)
+spotLight.position.set(100,1000,100)
+spotLight.intensity = 2;
 scene.add(spotLight)
 
 gltfLoader.load(
-    '../static/scene.gltf',
+    'Umbelra.glb',
     (gltf) =>
     {
         scene.add(gltf.scene)
@@ -84,6 +86,7 @@ const animate = () =>
 {
 
     renderer.render(scene, camera)
+    renderer.gammaOutput = true;
     controls.update()
 
     window.requestAnimationFrame(animate)
