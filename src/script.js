@@ -30,7 +30,7 @@ spotLight.position.set(-40,60,-10)
 scene.add(spotLight)
 
 gltfLoader.load(
-    'car.glb',
+    '../static/scene.gltf',
     (gltf) =>
     {
         scene.add(gltf.scene)
