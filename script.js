@@ -1,43 +1,92 @@
-// Create Babylon.js engine
-const canvas = document.getElementById("canvas-container");
-const engine = new BABYLON.Engine(canvas, true);
+import './style.css'
+import * as THREE from 'three'
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 
-// Create scene
-const scene = new BABYLON.Scene(engine);
+import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader'
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 
-// Create camera
-const camera = new BABYLON.ArcRotateCamera("camera", 0, 0, 0, new BABYLON.Vector3(0, 0, 0), scene);
-camera.setPosition(new BABYLON.Vector3(0, 0, -5));
-camera.attachControl(canvas, true);
+const canvas = document.querySelector('canvas.webgl')
 
-// Load model with MTL file
-BABYLON.SceneLoader.ImportMesh("", "./model/", "1.obj", scene, function (meshes) {
-    // Set materials
-    const materialPath = "./model/";
-    const materialFileName = "1.mtl";
+const sizes = {
+    width: window.innerWidth,
+    height: window.innerHeight
+}
 
-    BABYLON.SceneLoader.ImportMesh("", materialPath, materialFileName, scene, function (materialMeshes) {
-        // Apply materials to meshes
-        for (let i = 0; i < meshes.length; i++) {
-            const mesh = meshes[i];
-            const materialMesh = materialMeshes[i];
+const scene = new THREE.Scene()
 
-            mesh.material = materialMesh.material;
-        }
-    });
+const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height)
 
-    // Scale and position model
-    const model = meshes[0];
-    model.scaling = new BABYLON.Vector3(0.1, 0.1, 0.1);
-    model.position = new BABYLON.Vector3(0, 0, 0);
-});
+camera.position.z = 2
+scene.add(camera)
 
-// Render loop
-engine.runRenderLoop(function () {
-    scene.render();
-});
+const dracoLoader = new DRACOLoader()
+dracoLoader.setDecoderPath('draco/')
 
-// Resize event
-window.addEventListener("resize", function () {
-    engine.resize();
-});
+const gltfLoader = new GLTFLoader()
+gltfLoader.setDRACOLoader(dracoLoader)
+
+var spotLight = new THREE.SpotLight( 0xffffff )
+spotLight.position.set(-40,60,-10)
+scene.add(spotLight)
+
+gltfLoader.load(
+    'car.glb',
+    (gltf) =>
+    {
+        scene.add(gltf.scene)
+    }
+)
+
+
+
+const cursor ={x:0, y:0}
+window.addEventListener('mousemove', (event) =>
+{
+    cursor.x = event.clientX / sizes.width - 0.5
+    cursor.y = -( event.clientY / sizes.width - 0.5)
+})
+
+
+const renderer = new THREE.WebGLRenderer({
+    canvas: canvas
+})
+renderer.setSize(sizes.width, sizes.height)
+
+const controls = new OrbitControls(camera, canvas)
+
+
+
+window.addEventListener('dblclick',() =>
+{
+    if(!document.fullscreenElement)
+    {
+        canvas.requestFullscreen()
+    }
+    else
+    {
+        document.exitFullscreen()
+    }
+})
+
+
+window.addEventListener('resize', () => 
+{
+    sizes.width = window.innerWidth
+    sizes.height = window.innerHeight
+
+    camera.aspect = sizes.width / sizes.height
+    camera.updateProjectionMatrix()    
+
+    renderer.setSize(sizes.width, sizes.height)
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio,2))
+})
+const animate = () =>
+{
+
+    renderer.render(scene, camera)
+    controls.update()
+
+    window.requestAnimationFrame(animate)
+}
+
+animate()
