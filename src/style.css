@@ -5,11 +5,10 @@
 
 html, body {
     overflow: hidden;
+    font-family: 'IBM Plex Sans Thai', sans-serif;
 }
 
 .webgl {
-    position: relative;
-    top: 50;
     left: 0;
     outline: none;
 }
