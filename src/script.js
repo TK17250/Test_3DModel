@@ -26,9 +26,13 @@ const gltfLoader = new GLTFLoader()
 gltfLoader.setDRACOLoader(dracoLoader)
 
 scene.background = new THREE.Color(0xffffff);
+
 var light = new THREE.AmbientLight( 0xededed );
-light.intensity = 2;
+light.intensity = 1.3;
 scene.add(light);
+
+var directionalLight = new THREE.DirectionalLight( 0xffffff, 0.5 );
+scene.add( directionalLight );
 
 gltfLoader.load(
     'Umbelra.glb',
