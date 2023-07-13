@@ -37,17 +37,28 @@ scene.add(light);
 var directionalLight = new THREE.DirectionalLight( 0xffffff, 0.5 );
 scene.add( directionalLight );
 
-gltfLoader.load(
-    'Umbelra.glb',
-    (gltf) =>
-    {
-        gltf.scene.rotation.x = 0.7;
-        gltf.scene.rotation.y = 0.5;
-        gltf.scene.rotation.z = 5.4;
-        scene.add(gltf.scene)
-    }
-)
+// gltfLoader.load(
+//     'Umbelra.glb',
+//     (gltf) =>
+//     {
+//         gltf.scene.rotation.x = 0.7;
+//         gltf.scene.rotation.y = 0.5;
+//         gltf.scene.rotation.z = 5.4;
+//         scene.add(gltf.scene)
+//     }
+// )
 
+const mtLoader = new MTLLoader();
+mtLoader.load('1.mtl', function (materials) {
+    materials.preload();
+
+    const objLoader = new OBJLoader();
+    objLoader.setMaterials(materials);
+
+    objLoader.load('1.obj', function (object) {
+        scene.add(object);
+    });
+});
 
 
 const cursor ={x:0, y:0}
