@@ -94,21 +94,6 @@ renderer.setSize(sizes.width, sizes.height)
 
 const controls = new OrbitControls(camera, canvas)
 
-
-
-window.addEventListener('dblclick',() =>
-{
-    if(!document.fullscreenElement)
-    {
-        canvas.requestFullscreen()
-    }
-    else
-    {
-        document.exitFullscreen()
-    }
-})
-
-
 window.addEventListener('resize', () => 
 {
     sizes.width = window.innerWidth
