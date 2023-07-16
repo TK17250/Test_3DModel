@@ -6,7 +6,10 @@ import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader.js';
+
 import { MTLLoader } from 'three/examples/jsm/loaders/MTLLoader.js';
+import { TextureLoader } from 'three/src/loaders/TextureLoader';
+
 
 const canvas = document.querySelector('canvas.webgl')
 
@@ -25,14 +28,14 @@ scene.add(camera)
 const dracoLoader = new DRACOLoader()
 dracoLoader.setDecoderPath('draco/')
 
-const gltfLoader = new GLTFLoader()
-gltfLoader.setDRACOLoader(dracoLoader)
+// const gltfLoader = new GLTFLoader()
+// gltfLoader.setDRACOLoader(dracoLoader)
 
 scene.background = new THREE.Color(0xffffff);
 
-var light = new THREE.AmbientLight( 0xededed );
-light.intensity = 1.3;
-scene.add(light);
+// var light = new THREE.AmbientLight( 0xededed );
+// light.intensity = 1.3;
+// scene.add(light);
 
 var directionalLight = new THREE.DirectionalLight( 0xffffff, 0.5 );
 scene.add( directionalLight );
@@ -48,15 +51,30 @@ scene.add( directionalLight );
 //     }
 // )
 
-const mtLoader = new MTLLoader();
-mtLoader.load('1.mtl', function (materials) {
-    materials.preload();
+const textureLoader = new THREE.TextureLoader();
+const mtlLoader = new MTLLoader();
+
+mtlLoader.load('1.mtl', (mtl) => {
+    mtl.preload();
 
     const objLoader = new OBJLoader();
-    objLoader.setMaterials(materials);
+    objLoader.setMaterials(mtl);
 
-    objLoader.load('1.obj', function (object) {
-        scene.add(object);
+    textureLoader.load('1.jpg', (texture) => {
+        const material = new THREE.MeshBasicMaterial({ map: texture });
+        texture.wrapS = THREE.RepeatWrapping;
+        texture.wrapT = THREE.RepeatWrapping;
+        texture.repeat.set( 4, 4 );
+
+        objLoader.load('1.obj', (obj) => {
+            obj.traverse((child) => {
+                if (child instanceof THREE.Mesh) {
+                    child.material = material;
+                }
+            });
+
+            scene.add(obj);
+        });
     });
 });
 
