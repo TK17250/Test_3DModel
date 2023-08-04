@@ -2,10 +2,18 @@
 
 ### Setup 🛠️
 ```
-npm install // ติดตั้ง module
+// ติดตั้ง module
+npm install
 
-npm run dev // รันโปรแกรม
+// รันโปรแกรม
+npm run dev
 ```
+
+### 3D Model Download 🗽
+[Umbelra GLTF](https://github.com/TK17250/Test_3DModel/blob/main/model/Umbelra_pj.gltf) <br>
+[Umbelra GLB](https://github.com/TK17250/Test_3DModel/blob/main/model/Umbelra.glb) <br>
+[Umbelra OBJ](https://github.com/TK17250/Test_3DModel/blob/main/model/1.obj) <br>
+[Umbelra MTL](https://github.com/TK17250/Test_3DModel/blob/main/model/1.mtl)
 
 ### Languages 🗣️
 ![HTML](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
